@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全屏Tab加载</title>
+    <style>
+        /* 移除外边距和滚动条，确保真全屏 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; font-family: sans-serif; }
+
+        /* 容器占据 100% 宽高 */
+        .tab-container { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            width: 100vw; 
+        }
+        
+        /* 选项卡栏固定高度 */
+        .tab-menu { 
+            display: flex; 
+            background: #2c3e50; 
+            padding: 0 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .tab-link { 
+            padding: 15px 30px; 
+            cursor: pointer; 
+            border: none; 
+            outline: none;
+            background: none; 
+            transition: 0.3s; 
+            font-size: 16px; 
+            color: #bdc3c7; 
+        }
+
+        .tab-link:hover { background: #34495e; color: white; }
+
+        .tab-link.active { 
+            background: #3498db; 
+            color: white; 
+            font-weight: bold; 
+        }
+
+        /* 内容区域占据剩余所有空间 */
+        #content-frame { 
+            flex: 1; /* 自动填充剩余高度 */
+            width: 100%;
+            border: none; /* 移除 iframe 边框 */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tab-container">
+    <div class="tab-menu">
+        <button class="tab-link active" onclick="loadPage(this, 'vr.html')">VR</button>
+        <button class="tab-link" onclick="loadPage(this, 'jvr.html')">JVR</button>
+        <button class="tab-link" onclick="loadPage(this, '18vr.html')">18VR</button>
+    </div>
+
+    <!-- 使用 iframe 实现完美的全屏页面嵌入 -->
+    <iframe id="content-frame" src="about:blank"></iframe>
+</div>
+
+<script>
+    function loadPage(btn, url) {
+        const iframe = document.getElementById('content-frame');
+        
+        // 1. 切换按钮高亮
+        document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+
+        // 2. 直接修改 iframe 的 src 属性
+        // 这种方式不需要 fetch，不会产生跨域报错（同文件夹下），且支持全屏显示
+        iframe.src = url;
+    }
+
+    // 页面初始化
+    window.onload = () => {
+        const firstTab = document.querySelector('.tab-link');
+        loadPage(firstTab, 'vr.html');
+    };
+</script>
+
+</body>
+</html>

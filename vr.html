@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VR Movie</title>
+    <style>
+        :root {
+            --accent: #ff0000; /* 极致压迫感的血红 */
+            --bg: #000000;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html { 
+            height: 100%; 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: "Cinzel", "PingFang SC", serif; 
+            overflow: hidden; /* 禁止滚动，强化一体感 */
+        }
+
+        /* 背景：增加暗角（Vignette）效果强化压迫感 */
+        .master-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%),
+                url('https://images.unsplash.com') no-repeat center center;
+            background-size: cover;
+            filter: contrast(1.1) brightness(0.5);
+            z-index: -1;
+            transition: transform 10s linear; /* 背景缓慢移动模拟运镜 */
+            transform: scale(1.1);
+        }
+
+        /* 顶部极致简约导航 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand { 
+            font-size: 28px; 
+            font-weight: 900; 
+            letter-spacing: 12px; 
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        #live-clock {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.5);
+            font-family: monospace;
+        }
+
+        /* 中央内容区 */
+        .main-frame {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 10%;
+        }
+
+        .movie-meta {
+            font-size: 12px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--accent);
+            animation: fadeIn 2s ease;
+        }
+
+        h1 {
+            font-size: clamp(60px, 12vw, 150px);
+            font-weight: 800;
+            line-height: 0.85;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #fff 30%, #333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideDown 1.5s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+
+        /* 极简交互按钮 */
+        .cta-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .enter-btn {
+            position: relative;
+            padding: 15px 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: 0.4s;
+        }
+
+        .enter-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
+        }
+
+        /* 动画定义 */
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; letter-spacing: 20px; }
+            to { opacity: 1; letter-spacing: 5px; }
+        }
+
+        /* 移动端调整 */
+        @media (max-width: 768px) {
+            nav { padding: 30px 20px; }
+            .brand { font-size: 20px; letter-spacing: 6px; }
+            h1 { font-size: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="master-bg" id="bg"></div>
+
+    <nav>
+        <div class="brand">PPVR</div>
+        <div id="live-clock">00:00:00</div>
+    </nav>
+
+    <main class="main-frame">
+        <div class="movie-meta">Virtual Reality</div>
+        <h1>VR 180 8K 90FPS</h1>
+        <div class="cta-container">
+            <a href="#" class="btn enter-btn">被视为当前沉浸式视频的“黄金标准”，它代表了超高清分辨率、高帧率与 3D 立体视觉的顶级结合。
+让观众在戴上 VR 头显时感觉身临其境。</a>
+        </div>
+    </main>
+
+    <script>
+        // 实时时钟
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
+                          now.getMinutes().toString().padStart(2, '0') + ":" + 
+                          now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('live-clock').innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 模拟运镜效果
+        window.onload = () => {
+            document.getElementById('bg').style.transform = "scale(1.0)";
+        };
+    </script>
+</body>
+</html>
